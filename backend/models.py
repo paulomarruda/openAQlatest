@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import requests
-import datetime as dt 
-from constants import abel, openAQ_api_key, datafeeder, datafeeder_passwd 
+import datetime as dt
+from constants import abel, openAQ_api_key, datafeeder, datafeeder_passwd
+
+
 class DataFetcher:
     """
     Fetcher for the data provided by the OpenAQ API. This will function as the 
@@ -10,23 +12,23 @@ class DataFetcher:
     Attributes
     ----------
     headers : dict
-    A dictionary containing the API-KEY allowing access to the API.
+        A dictionary containing the API-KEY allowing access to the API.
     dt_format_in : str
-    A string with the format of the time used by OpenAQ.
+        A string with the format of the time used by OpenAQ.
     initial_cut : datetime.datetime
-    Initial date to cut off the locations that are not receiving more updates.
+        Initial date to cut off the locations that are not receiving more updates.
     Methods
     -------
     fetchLocations -> list
-    Fetches the locations near Vienna.
+        Fetches the locations near Vienna.
     fetchParameters -> list
-    Fetches the parameters used by OpenAQ.
+        Fetches the parameters used by OpenAQ.
     fetchLatestMeasurements -> list
-    Fetches the latest data of the provided locations.
+        Fetches the latest data of the provided locations.
     """
 
     def __init__(self):
-        self.headers = {"X-API-Key" : openAQ_api_key}
+        self.headers = {"X-API-Key": openAQ_api_key}
         self.dt_format_in = "%Y-%m-%dT%H:%M:%S+00:00"
         today = dt.date.today()
         self.initial_cut = dt.datetime(
@@ -160,7 +162,7 @@ class DataFetcher:
         url = "https://api.openaq.org/v2/parameters"
         dict_locations = {locations.get(locationId).get("name") : locationId for locationId in locations}
         dict_parameters = {parameters.get(parameterId).get("name") : parameterId for parameterId in parameters}
-        url = f"https://api.openaq.org/v2/latest?"
+        url = "https://api.openaq.org/v2/latest?"
         for locationId in locations:
             url = url + f"&location={locationId}"
         response = requests.get(url, headers=self.headers)

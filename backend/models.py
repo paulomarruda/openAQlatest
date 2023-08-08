@@ -188,29 +188,36 @@ class DataFetcher:
                 )
         return measurements
     def prepareParameters(self, parameters, measurements):
+        '''
+        Parser for the parameters keys. Turn the keys from `int` to `str`
+        and select only the parameters being measured by the present locations.
+        Parameters
+        ----------
+        parameters: dict
+            the dictionary contaning the parameters and their info.
+        measurements : tuple
+            latest measurements collected.
+        Returns
+        -------
+        parameters: dict
+            the dictionary with keys turned into strings.
+        '''
         presents = (measurement[1] for measurement in measurements)
         return {
             str(parameterId) : parameters[parameterId] for parameterId in presents
         }
     def prepareLocations(self,locations):
+        '''
+        Pareser for the locations keys. Turn the keys from `int` to `str`.
+        Parameters
+        ----------
+        locations: dict
+            the dictionary containing the locations and their info. 
+        Returns
+        -------
+        locations: dict 
+            the dictionary with keys turned into strings.
+        '''
         return {
             str(locationId) : locations[locationId] for locationId in locations
         }
-
-class OpenAQ:
-    def __init__(self):
-        self.fetcher = DataFetcher()
-        self.parameters = None
-        self.locations = None
-        self.latestMeasurements = None 
-        self.lastUpdated = None 
-    def connect(self):
-        self.lastUpdated = dt.datetime.now()
-        raw_locations = self.fetcher.fetchLocations()
-        self.locations = self.fetcher.prepareLocations(raw_locations)
-        raw_parameters = self.fetcher.fetchParameters()
-        self.latestMeasurements = self.fetcher.fetchLatestMeasurements(raw_locations, raw_parameters)
-        self.parameters = self.fetcher.prepareParameters(raw_parameters, self.latestMeasurements)
-
-        
-

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+'''
+Data dealer and fetcher for the OpenAQ API. 
+'''
 import requests
 import datetime as dt
-from constants import abel, openAQ_api_key, datafeeder, datafeeder_passwd
+from constants import abel, openAQ_api_key, datafeeder, radius, vienna_coordinates
 
 
 class DataFetcher:
@@ -20,7 +23,7 @@ class DataFetcher:
     Methods
     -------
     fetchLocations -> list
-        Fetches the locations near Vienna.
+        Fetches the locations near Vienna (20 km radius).
     fetchParameters -> list
         Fetches the parameters used by OpenAQ.
     fetchLatestMeasurements -> list
@@ -58,10 +61,11 @@ class DataFetcher:
             manufacturerName : str
                 Name of the manufacturer          
         Raises
-        ------
+        ======
+        TBI
         """
-        urlLocations = "https://api.openaq.org/v2/locations?coordinates=48.20849%2C16.37208&radius=20000"
-        response = requests.get(urlLocations,headers=self.headers)
+        urlLocations = f"https://api.openaq.org/v2/locations?coordinates={vienna_coordinates.get('latitude')}%2C{vienna_coordinates.get('longitude')}&radius={radius}"
+        response = requests.get(urlLocations, headers=self.headers)
         # implement dealing with responses 
         results = response.json().get("results")
         locations = {}
@@ -98,7 +102,8 @@ class DataFetcher:
             preferredUnit : str
                 Unit of the measurement collected by this parameter.
         Raises
-        ------
+        ======
+        TBI
         """
         url = "https://api.openaq.org/v2/parameters"
         response = requests.get(url, headers=self.headers)
@@ -157,7 +162,8 @@ class DataFetcher:
             value: float 
                 Value of the measurement.
         Raises
-        ------
+        ======
+        TBI
         """
         url = "https://api.openaq.org/v2/parameters"
         dict_locations = {locations.get(locationId).get("name") : locationId for locationId in locations}

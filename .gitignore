@@ -1,4 +1,5 @@
-*.ipynb 
-.ipynb_checkpoints/
+**/*.ipynb 
+**/__pycache__/
+**/.ipynb_checkpoints/
 tests/
 backend/constants.py
